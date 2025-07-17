@@ -8,14 +8,30 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username && password) {
-      login(username);
-      navigate("/");
+    try {
+      const res = await fetch("http://localhost:8000/api/members/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: username,
+          password,
+        }),
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        login(data.user);
+        navigate("/");
+      } else {
+        alert(data.error || "登入失敗。");
+      }
+    } catch (error) {
+      alert("發生錯誤，請稍後再試。");
+      console.error(error);
     }
   };
-
   const handleInputChange = (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) => setter(e.target.value);
 
   return (

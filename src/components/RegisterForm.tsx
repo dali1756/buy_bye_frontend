@@ -8,11 +8,32 @@ function RegisterForm() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const navigate = useNavigate();
-  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/login");
+    try {
+      const res = await fetch("http://localhost:8000/api/members/register/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          passwordConfirmation,
+        }),
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("註冊成功。");
+        navigate("/login");
+      } else {
+        alert(data.error || "註冊失敗。");
+      }
+    } catch (error) {
+      alert("發生錯誤，請稍後再試。");
+      console.error(error);
+    }
   };
-
   const handleInputChange = (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) => setter(e.target.value);
 
   return (

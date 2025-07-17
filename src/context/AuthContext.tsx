@@ -43,7 +43,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch("/api/members/logout/", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("登出錯誤", error);
+    }
     setUser(null);
     localStorage.removeItem("user");
   };
