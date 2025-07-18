@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ContactUs from "./pages/ContactUs";
+import ReturnAndRefunds from "./pages/ReturnAndRefunds"
 
 interface RouteProps {
   children: ReactNode;
@@ -69,6 +70,8 @@ function App() {
         />
 
         <Route path="/contact" element={<ContactUs />} />
+
+        <Route path="/returns" element={<ReturnAndRefunds />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

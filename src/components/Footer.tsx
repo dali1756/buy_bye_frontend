@@ -5,6 +5,9 @@ function Footer() {
   const handleContactUs = () => {
     navigate("/contact");
   };
+  const handleReturns = () => {
+    navigate("/returns")
+  }
 
   return (
     <footer className="bg-gray-800 text-white mt-16">
@@ -24,7 +27,7 @@ function Footer() {
                 <a href="#" className="hover:text-white transition-colors">運送資訊</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">退換貨政策</a>
+                <button onClick={handleReturns} className="hover:text-white transition-colors text-left">退換貨政策</button>
               </li>
             </ul>
           </div>
