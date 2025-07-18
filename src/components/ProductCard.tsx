@@ -15,7 +15,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
       <div className="relative overflow-hidden">
-        <img src={product.image} alt={product.name} className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"/>
+        <img src={product.image} alt={product.name} className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"/>
       </div>
       <div className="p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.name}</h3>

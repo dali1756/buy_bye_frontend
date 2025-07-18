@@ -96,7 +96,7 @@ function ContactUs() {
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <button className="hover:text-orange-500">首頁</button>
+            <a href="http://localhost:5173/" className="hover:text-orange-500">首頁</a>
             <span>＞</span>
             <span className="text-orange-500">客戶服務</span>
             <span>＞</span>

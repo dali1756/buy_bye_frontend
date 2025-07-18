@@ -12,7 +12,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">關於 BuyBye</h3>
-            <p className="text-gray-400 text-sm">說書人。</p>
+            <p className="text-gray-400 text-sm">天橋下の說書人。</p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">客戶服務</h3>
@@ -20,16 +20,26 @@ function Footer() {
               <li>
                 <button onClick={handleContactUs} className="hover:text-white transition-colors text-left">聯絡我們</button>
               </li>
-              <li><a href="#" className="hover:text-white transition-colors">運送資訊</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">退換貨政策</a></li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">運送資訊</a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">退換貨政策</a>
+              </li>
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">購物指南</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">尺寸指南</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">穿搭建議</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">保養方式</a></li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">尺寸指南</a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">穿搭建議</a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">保養方式</a>
+              </li>
             </ul>
           </div>
           <div>
