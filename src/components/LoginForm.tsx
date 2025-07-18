@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import GoogleLogin from "./GoogleLogin";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -52,7 +53,7 @@ function LoginForm() {
           <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50">登入</button>
         </div>
       </form>
-
+      <GoogleLogin />
       <div className="mt-6 text-center">
         <p className="text-gray-600">
           還沒有帳號？{" "}

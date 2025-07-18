@@ -29,6 +29,9 @@ function Footer() {
               <a href="https://github.com/dali1756" target="_blank" className="text-gray-400 hover:text-white">
                 <i className="fa-brands fa-github"></i>
               </a>
+              <a href="https://hackmd.io/@JeterYu" target="_blank" className="text-gray-400 hover:text-white">
+                <i className="fa-solid fa-file-alt text-2xl" title="HackMD"></i>
+              </a>
             </div>
           </div>
         </div>

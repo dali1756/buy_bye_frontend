@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLogin from "./GoogleLogin";
 
 function RegisterForm() {
   const [name, setName] = useState("");
@@ -24,7 +25,6 @@ function RegisterForm() {
       });
       const data = await res.json();
       if (res.ok) {
-        alert("註冊成功。");
         navigate("/login");
       } else {
         alert(data.error || "註冊失敗。");
@@ -64,7 +64,7 @@ function RegisterForm() {
           <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50">註冊</button>
         </div>
       </form>
-
+      <GoogleLogin />
       <div className="mt-6 text-center">
         <p className="text-gray-600">
           已有帳號？{" "}

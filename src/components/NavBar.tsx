@@ -1,4 +1,3 @@
-// src/components/NavBar.tsx
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Search, User, ShoppingCart } from "lucide-react";
@@ -20,7 +19,7 @@ function NavBar() {
     <nav className="bg-white shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <span className="text-xl font-bold text-gray-800">BuyBye</span>
+          <a href="http://localhost:5173/" className="text-3xl font-bold text-orange-500">BuyBye</a>
           <div className="hidden md:flex items-center space-x-8">
             <button className="text-gray-700 hover:text-orange-500 transition-colors">商品</button>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition-colors">店舖</a>
