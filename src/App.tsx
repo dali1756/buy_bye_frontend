@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ContactUs from "./pages/ContactUs";
 
 interface RouteProps {
   children: ReactNode;
@@ -66,6 +67,8 @@ function App() {
             </PublicRoute>
           } 
         />
+
+        <Route path="/contact" element={<ContactUs />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

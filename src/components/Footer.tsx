@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
 function Footer() {
+  const navigate = useNavigate();
+  const handleContactUs = () => {
+    navigate("/contact");
+  };
+
   return (
     <footer className="bg-gray-800 text-white mt-16">
       <div className="container mx-auto px-4 py-12">
@@ -10,7 +17,9 @@ function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">客戶服務</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">聯絡我們</a></li>
+              <li>
+                <button onClick={handleContactUs} className="hover:text-white transition-colors text-left">聯絡我們</button>
+              </li>
               <li><a href="#" className="hover:text-white transition-colors">運送資訊</a></li>
               <li><a href="#" className="hover:text-white transition-colors">退換貨政策</a></li>
             </ul>
