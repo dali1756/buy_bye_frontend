@@ -7,7 +7,8 @@ import Register from "./pages/Register";
 import ContactUs from "./pages/ContactUs";
 import ReturnAndRefunds from "./pages/ReturnAndRefunds"
 import ShoppingInfos from "./pages/ShoppingInfo";
-import ProductCare from "./pages/ProductCare";
+import ProductCares from "./pages/ProductCare";
+import SizeInfos from "./pages/Size";
 
 interface RouteProps {
   children: ReactNode;
@@ -77,7 +78,9 @@ function App() {
 
         <Route path="/shoppings" element={<ShoppingInfos />} />
 
-        <Route path="/cares" element={<ProductCare />} />
+        <Route path="/cares" element={<ProductCares />} />
+
+        <Route path="/sizes" element={<SizeInfos />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

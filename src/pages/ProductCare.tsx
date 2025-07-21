@@ -2,7 +2,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
-function ProductCare() {
+function ProductCares() {
   return (
     <>
       <NavBar />
@@ -54,7 +54,7 @@ function ProductCare() {
         </section>
         <div className="mt-12 bg-orange-50 rounded-lg p-6 text-center">
           <h2 className="text-xl font-semibold mb-2 text-gray-900">延長商品壽命，從正確の保養開始。</h2>
-          <p className="text-gray-700">若您有其他保養相關問題，歡迎透過<Link to="/contacts" className="text-orange-600 underline hover:text-orange-800 ml-1">聯絡我們</Link>與我們進行聯繫。</p>
+          <p className="text-gray-700">若您有其他保養相關問題，歡迎透過<Link to="/contacts" className="text-orange-600 underline hover:text-orange-800 ml-1">聯絡我們</Link> 與我們進行聯繫。</p>
         </div>
       </div>
       <Footer />
@@ -62,4 +62,4 @@ function ProductCare() {
   )
 }
 
-export default ProductCare;
+export default ProductCares;

@@ -14,6 +14,9 @@ function Footer() {
   const handleCare = () => {
     navigate("/cares");
   }
+  const handleSize = () => {
+    navigate("/sizes");
+  }
 
   return (
     <footer className="bg-gray-800 text-white mt-16">
@@ -41,7 +44,7 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4">購物指南</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#" className="hover:text-white transition-colors">尺寸指南</a>
+                <button onClick={handleSize} className="hover:text-white transition-colors text-left">尺寸指南</button>
               </li>
               <li>
                 <a href="https://www.beams.tw/staff/" target="_blank" className="hover:text-white transition-colors">穿搭建議</a>

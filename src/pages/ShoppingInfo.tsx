@@ -36,13 +36,10 @@ function ShoppingInfos() {
             <p>配送時間依地區而異，一般約莫 1～3 天可送達。</p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-2">注意事項</h2>
-            <ul className="list-disc pl-5">
-              <li>請確保提供的地址與聯絡資訊正確，以避免商品無法配送。</li>
-              <li>如需退換貨請參考<Link to="/returns" className="text-orange-600 underline hover:text-orange-800 ml-1">退換貨政策</Link>。</li>
-            </ul>
-          </section>
+          <div className="mt-12 bg-orange-50 rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold mb-2 text-gray-900">注意事項</h2>
+            <p className="text-gray-700">請確保提供的地址與聯絡資訊正確，以避免商品無法配送。<br/>如需退換貨請參考<Link to="/returns" className="text-orange-600 underline hover:text-orange-800 ml-1">退換貨政策</Link>。</p>
+          </div>
         </div>
       </div>
       <Footer />
