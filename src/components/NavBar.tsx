@@ -5,14 +5,15 @@ import { Search, User, ShoppingCart } from "lucide-react";
 function NavBar() {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-
   const handleLogin = () => {
     navigate("/login");
+  };
+  const handleShop = () => {
+    navigate("/shops");
   };
 
   return (
@@ -21,8 +22,8 @@ function NavBar() {
         <div className="flex justify-between items-center py-4">
           <a href="http://localhost:5173/" className="text-3xl font-bold text-orange-500">BuyBye</a>
           <div className="hidden md:flex items-center space-x-8">
-            <button className="text-gray-700 hover:text-orange-500 transition-colors">商品</button>
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition-colors">店舖</a>
+            <a href="http://localhost:5173/" className="hover:text-orange-500 transition-colors">商品</a>
+            <button onClick={handleShop} className="hover:text-orange-500 transition-colors">店舖</button>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition-colors">品牌</a>
           </div>
           <div className="flex items-center space-x-4">
