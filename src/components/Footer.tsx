@@ -11,6 +11,9 @@ function Footer() {
   const handleShoppings = () => {
     navigate("/shoppings");
   }
+  const handleCare = () => {
+    navigate("/cares");
+  }
 
   return (
     <footer className="bg-gray-800 text-white mt-16">
@@ -44,7 +47,7 @@ function Footer() {
                 <a href="https://www.beams.tw/staff/" target="_blank" className="hover:text-white transition-colors">穿搭建議</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">保養方式</a>
+                <button onClick={handleCare} className="hover:text-white transition-colors text-left">保養方式</button>
               </li>
             </ul>
           </div>
