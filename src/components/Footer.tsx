@@ -27,7 +27,7 @@ function Footer() {
                 <button onClick={handleContactUs} className="hover:text-white transition-colors text-left">聯絡我們</button>
               </li>
               <li>
-                <button onClick={handleShoppings} className="hover:text-white transition-colors">運送資訊</button>
+                <button onClick={handleShoppings} className="hover:text-white transition-colors text-left">運送資訊</button>
               </li>
               <li>
                 <button onClick={handleReturns} className="hover:text-white transition-colors text-left">退換貨政策</button>
@@ -41,7 +41,7 @@ function Footer() {
                 <a href="#" className="hover:text-white transition-colors">尺寸指南</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">穿搭建議</a>
+                <a href="https://www.beams.tw/staff/" target="_blank" className="hover:text-white transition-colors">穿搭建議</a>
               </li>
               <li>
                 <a href="#" className="hover:text-white transition-colors">保養方式</a>
