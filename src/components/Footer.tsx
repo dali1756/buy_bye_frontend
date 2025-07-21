@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 function Footer() {
   const navigate = useNavigate();
   const handleContactUs = () => {
-    navigate("/contact");
+    navigate("/contacts");
   };
   const handleReturns = () => {
     navigate("/returns")
+  }
+  const handleShoppings = () => {
+    navigate("/shoppings");
   }
 
   return (
@@ -24,7 +27,7 @@ function Footer() {
                 <button onClick={handleContactUs} className="hover:text-white transition-colors text-left">聯絡我們</button>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">運送資訊</a>
+                <button onClick={handleShoppings} className="hover:text-white transition-colors">運送資訊</button>
               </li>
               <li>
                 <button onClick={handleReturns} className="hover:text-white transition-colors text-left">退換貨政策</button>
