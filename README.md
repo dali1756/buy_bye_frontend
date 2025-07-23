@@ -1,2 +1,2 @@
 ## Buy Bye
-![Alt text](public/home.png)
+![Alt text](public/home_page.png)

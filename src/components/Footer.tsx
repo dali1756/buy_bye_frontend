@@ -67,7 +67,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; 2025 BUYBYE. 版權所有.</p>
+          <p>&copy; 2025 Jeter. 版權所有.</p>
         </div>
       </div>
     </footer>

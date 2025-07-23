@@ -6,7 +6,6 @@ import SortDown from "../components/Sort";
 import ProductGrid from "../components/ProductGrid";
 import Footer from "../components/Footer";
 import type { Product, SortOption } from "../types/Product";
-import { sortProducts, filterProductsByCategory } from "../utils/productUtils";
 
 interface ApiProduct {
   id: number;
@@ -28,14 +27,28 @@ interface ApiCategory {
 }
 
 function Home() {
-  const { user } = useAuth();
+  const { } = useAuth();
   const [activeCategory, setActiveCategory] = useState("MEN");
   const [sortOption, setSortOption] = useState<SortOption>("default");
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const Products_URL = "http://localhost:8000/api/products";
+  const buildQueryParams = () => {
+    const params = new URLSearchParams();
+    if (searchQuery) {
+      params.append("search", searchQuery);
+    }
+    if (activeCategory && activeCategory !== "ALL") {
+      params.append("category_name", activeCategory);
+    }
+    if (sortOption && sortOption !== "default") {
+      params.append("ordering", sortOption);
+    }
+    return params.toString();
+  };
   const fetchCategories = async () => {
     try {
       const response = await fetch(`${Products_URL}/categories/`);
@@ -65,7 +78,10 @@ function Home() {
   // 撈取產品資料
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${Products_URL}/`);
+      setLoading(true);
+      const queryParams = buildQueryParams();
+      const url = queryParams ? `${Products_URL}/?${queryParams}` : `${Products_URL}/`;
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -78,18 +94,23 @@ function Home() {
         category: apiProduct.category?.name || "UNCATEGORIZED"
       }));
       setProducts(transformedProducts);
+      setError(null);
     } catch (error) {
+      console.error("撈取產品資料失敗：", error);
       setError("撈取產品資料失敗。");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await Promise.all([fetchCategories(), fetchProducts()]);
-      setLoading(false);
-    };
-    loadData();
+    fetchCategories();
   }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, [searchQuery, activeCategory, sortOption]);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
   };
@@ -103,7 +124,7 @@ function Home() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <NavBar />
+        <NavBar onSearch={handleSearch} />
         <div className="flex justify-center items-center h-64">
           <div className="text-xl text-gray-600">載入中...</div>
         </div>
@@ -114,7 +135,7 @@ function Home() {
   if (error && products.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <NavBar />
+        <NavBar onSearch={handleSearch} />
         <div className="flex justify-center items-center h-64">
           <div className="text-xl text-red-600">{error}</div>
         </div>
@@ -122,12 +143,10 @@ function Home() {
       </div>
     );
   }
-  const filteredProducts = filterProductsByCategory(products, activeCategory);
-  const sortedProducts = sortProducts(filteredProducts, sortOption);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBar />
+      <NavBar onSearch={handleSearch} />
       {error && (
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
           <p className="font-bold">警告</p>
@@ -136,7 +155,7 @@ function Home() {
       )}
       <Category categories={categories} activeCategory={activeCategory} onCategoryChange={handleCategoryChange}/>
       <SortDown sortOption={sortOption} onSortChange={handleSortChange}/>
-      <ProductGrid products={sortedProducts} onAddToCart={handleAddToCart}/>
+      <ProductGrid products={products} onAddToCart={handleAddToCart}/>
       <Footer />
     </div>
   );

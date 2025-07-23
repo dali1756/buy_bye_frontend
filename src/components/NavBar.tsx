@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Search, User, ShoppingCart, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { RiShirtFill } from "react-icons/ri";
 import { FaTshirt } from "react-icons/fa";
 import { GiSleevelessJacket, GiLabCoat, GiDress, GiTie } from "react-icons/gi";
@@ -10,17 +10,41 @@ import { PiPantsDuotone } from "react-icons/pi";
 import { FaShoppingBag } from "react-icons/fa";
 import { PiSneakerFill } from "react-icons/pi";
 
-const NavBar = () => {
+interface NavBarProps {
+  onSearch?: (query: string) => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof productCategories>("MEN");
+  const [searchQuery, setSearchQuery] = useState("");
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
   const handleLogin = () => navigate("/login");
   const handleShop = () => navigate("/shops");
+  const debounceSearch = useCallback(
+    debounce((query: string) => {
+      if (onSearch) {
+        onSearch(query);
+      }
+    }, 300),
+    [onSearch]
+  );
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debounceSearch(query);
+  };
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(searchQuery);
+    }
+  };
   const productCategories = {
     MEN: [
       { name: "襯衫・罩衫", icon: <RiShirtFill />, items: ["西裝襯衫", "休閒襯衫", "罩衫", "Polo衫"] },
@@ -89,7 +113,14 @@ const NavBar = () => {
             <button onClick={() => navigate("/brands")} className="text-gray-700 hover:text-orange-500 py-2">品牌</button>
           </div>
           <div className="flex items-center space-x-3">
-            <button className="p-2 text-gray-600 hover:text-orange-500 rounded-full hover:bg-orange-50"><Search size={20} /></button>
+            <div className="relative">
+              <form onSubmit={handleSearchSubmit}>
+                <input type="text" value={searchQuery} onChange={handleSearchInput} placeholder="搜尋產品..." className="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"/>
+                <button type="submit" className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </button>
+              </form>
+            </div>
             {isAuthenticated ? (
               <>
                 <button onClick={() => navigate("/cart")} className="p-2 text-gray-600 hover:text-orange-500 relative rounded-full hover:bg-orange-50">
@@ -123,5 +154,16 @@ const NavBar = () => {
     </nav>
   );
 };
+function debounce(func: Function, wait: number) {
+  let timeout: ReturnType<typeof setTimeout>;
+  return function executedFunction(...args: any[]) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 export default NavBar;
