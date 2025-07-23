@@ -44,9 +44,7 @@ const NavBar = () => {
       { name: "洋裝", icon: <GiDress />, items: ["連身裙", "洋裝"] },
     ]
   };
-
   const mainCategories: Array<keyof typeof productCategories> = ["MEN", "WOMEN"];
-
   const handleCategoryClick = (category: keyof typeof productCategories, item: (typeof productCategories)[keyof typeof productCategories][number]) => {
     const categoryPath = `/category/${category.toLocaleLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
     navigate(categoryPath);
@@ -74,15 +72,13 @@ const NavBar = () => {
                     </div>
                   </div>
                   <div className="p-6">
-                    <div className="grid grid-cols-1 gap-8">
-                      <div className="space-y-2">
-                        {productCategories[selectedCategory].map((item, index) => (
-                          <button key={index} onClick={() => handleCategoryClick(selectedCategory, item)} className="flex items-center space-x-3 w-full p-2 hover:bg-orange-50 hover:text-orange-600 rounded-lg text-left group">
-                            <span className="text-lg group-hover:scale-110 transition-transform">{item.icon}</span>
-                            <span className="text-sm font-medium text-gray-700 group-hover:text-orange-600">{item.name}</span>
-                          </button>
-                        ))}
-                      </div>
+                    <div className="grid grid-cols-5 gap-4">
+                      {productCategories[selectedCategory].map((item, index) => (
+                        <button key={index} onClick={() => handleCategoryClick(selectedCategory, item)} className="flex items-center space-x-2 p-2 hover:bg-orange-50 hover:text-orange-600 rounded-lg text-left group w-full">
+                          <span className="text-lg group-hover:scale-110 transition-transform">{item.icon}</span>
+                          <span className="text-sm font-medium text-gray-700 group-hover:text-orange-600">{item.name}</span>
+                        </button>
+                      ))}
                     </div>
                     <div className="mt-6 pt-4 border-t border-gray-200 text-center">
                       <button onClick={() => { navigate("/products"); setIsProductMenuOpen(false); }} className="text-orange-500 hover:text-orange-600 font-medium">查看所有商品 →</button>
@@ -100,7 +96,7 @@ const NavBar = () => {
               <>
                 <button onClick={() => navigate("/cart")} className="p-2 text-gray-600 hover:text-orange-500 relative rounded-full hover:bg-orange-50">
                   <ShoppingCart size={20} />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">3</span>
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">99</span>
                 </button>
                 <div className="relative group">
                   <button className="flex items-center space-x-2 p-2 text-gray-600 hover:text-orange-500 rounded-lg hover:bg-orange-50">
