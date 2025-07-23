@@ -14,7 +14,7 @@ const NavBar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("MEN");
+  const [selectedCategory, setSelectedCategory] = useState<keyof typeof productCategories>("MEN");
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -45,13 +45,13 @@ const NavBar = () => {
     ]
   };
 
-  const mainCategories = ["MEN", "WOMEN"];
+  const mainCategories: Array<keyof typeof productCategories> = ["MEN", "WOMEN"];
 
-  const handleCategoryClick = (category, item) => {
-    const categoryPath = `/category/${category.toLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
+  const handleCategoryClick = (category: keyof typeof productCategories, item: (typeof productCategories)[keyof typeof productCategories][number]) => {
+    const categoryPath = `/category/${category.toLocaleLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
     navigate(categoryPath);
     setIsProductMenuOpen(false);
-  };
+  }
 
   return (
     <nav className="bg-white shadow-sm relative">
