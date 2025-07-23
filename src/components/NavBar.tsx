@@ -57,35 +57,33 @@ const NavBar = () => {
         <div className="flex justify-between items-center py-4">
           <button onClick={() => navigate("/")} className="text-3xl font-bold text-orange-500 hover:text-orange-600">BuyBye</button>
           <div className="hidden md:flex items-center space-x-8">
-            <div className="relative" onMouseEnter={() => setIsProductMenuOpen(true)} onMouseLeave={() => setIsProductMenuOpen(false)}>
+            <div className="relative group" onMouseEnter={() => setIsProductMenuOpen(true)} onMouseLeave={() => setIsProductMenuOpen(false)}>
               <button className="flex items-center space-x-1 hover:text-orange-500 py-2">
                 <span>商品</span>
                 <ChevronDown size={16} className={`transform transition-transform duration-200 ${isProductMenuOpen ? "rotate-180" : ""}`} />
               </button>
-              {isProductMenuOpen && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 bg-white rounded-lg shadow-xl border z-50" style={{ width: "1000px" }}>
-                  <div className="bg-gray-50 px-8 py-4 rounded-t-lg">
-                    <div className="flex justify-center space-x-16">
-                      {mainCategories.map((category) => (
-                        <h3 key={category} onClick={() => setSelectedCategory(category)} className={`text-xl font-bold tracking-wider cursor-pointer ${selectedCategory === category ? "text-orange-500" : "text-gray-700"}`}>{category}</h3>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="grid grid-cols-5 gap-4">
-                      {productCategories[selectedCategory].map((item, index) => (
-                        <button key={index} onClick={() => handleCategoryClick(selectedCategory, item)} className="flex items-center space-x-2 p-2 hover:bg-orange-50 hover:text-orange-600 rounded-lg text-left group w-full">
-                          <span className="text-lg group-hover:scale-110 transition-transform">{item.icon}</span>
-                          <span className="text-sm font-medium text-gray-700 group-hover:text-orange-600">{item.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-                      <button onClick={() => { navigate("/products"); setIsProductMenuOpen(false); }} className="text-orange-500 hover:text-orange-600 font-medium">查看所有商品 →</button>
-                    </div>
+              <div className={`absolute left-1/2 transform -translate-x-1/2 top-full mt-2 bg-white rounded-lg shadow-xl border z-50 transition-opacity duration-200 ${isProductMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} style={{ width: "1000px" }}>
+                <div className="bg-gray-50 px-8 py-4 rounded-t-lg">
+                  <div className="flex justify-center space-x-16">
+                    {mainCategories.map((category) => (
+                      <h3 key={category} onClick={() => setSelectedCategory(category)} className={`text-xl font-bold tracking-wider cursor-pointer ${selectedCategory === category ? "text-orange-500" : "text-gray-700"}`}>{category}</h3>
+                    ))}
                   </div>
                 </div>
-              )}
+                <div className="p-6">
+                  <div className="grid grid-cols-5 gap-4">
+                    {productCategories[selectedCategory].map((item, index) => (
+                      <button key={index} onClick={() => handleCategoryClick(selectedCategory, item)} className="flex items-center space-x-2 p-2 hover:bg-orange-50 rounded-lg text-left group w-full">
+                        <span className="text-lg group-hover:scale-110 transition-transform">{item.icon}</span>
+                        <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+                    <button onClick={() => {navigate("/products"); setIsProductMenuOpen(false);}} className="text-orange-500 hover:text-orange-600 font-medium">查看所有商品 →</button>
+                  </div>
+                </div>
+              </div>
             </div>
             <button onClick={handleShop} className="hover:text-orange-500 py-2">店舖</button>
             <button onClick={() => navigate("/brands")} className="text-gray-700 hover:text-orange-500 py-2">品牌</button>

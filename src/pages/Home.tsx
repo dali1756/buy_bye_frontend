@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
 import Category from "../components/Category";
@@ -8,113 +8,132 @@ import Footer from "../components/Footer";
 import type { Product, SortOption } from "../types/Product";
 import { sortProducts, filterProductsByCategory } from "../utils/productUtils";
 
+interface ApiProduct {
+  id: number;
+  name: string;
+  price: string;
+  stock: number;
+  description: string;
+  category: {
+    id: number;
+    name: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ApiCategory {
+  id: number;
+  name: string;
+}
+
 function Home() {
   const { user } = useAuth();
   const [activeCategory, setActiveCategory] = useState("MEN");
   const [sortOption, setSortOption] = useState<SortOption>("default");
-
-  const categories = ["MEN", "WOMEN"];
-  
-  // 假資料
-  const products: Product[] = [
-    {
-      id: 1,
-      name: "襯衫",
-      price: 2890,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-    {
-      id: 2,
-      name: "毛衣",
-      price: 3490,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-    {
-      id: 3,
-      name: "西裝外套",
-      price: 5890,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-    {
-      id: 4,
-      name: "西裝褲",
-      price: 4290,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-    {
-      id: 5,
-      name: "上衣",
-      price: 2690,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-    {
-      id: 6,
-      name: "西裝外套",
-      price: 6290,
-      image: "https://picsum.photos/200/300",
-      category: "WOMEN"
-    },
-    {
-      id: 7,
-      name: "西裝褲",
-      price: 1290,
-      image: "https://picsum.photos/200/300",
-      category: "WOMEN"
-    },
-    {
-      id: 8,
-      name: "長裙",
-      price: 7290,
-      image: "https://picsum.photos/200/300",
-      category: "WOMEN"
-    },
-    {
-      id: 9,
-      name: "連身裙",
-      price: 8290,
-      image: "https://picsum.photos/200/300",
-      category: "WOMEN"
-    },
-    {
-      id: 10,
-      name: "草帽",
-      price: 9290,
-      image: "https://picsum.photos/200/300",
-      category: "WOMEN"
-    },
-    {
-      id: 11,
-      name: "短褲",
-      price: 500,
-      image: "https://picsum.photos/200/300",
-      category: "MEN"
-    },
-  ];
-
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const Products_URL = "http://localhost:8000/api/products";
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${Products_URL}/categories/`);
+      if (!response.ok) {
+        if (response.status === 404) {
+          console.warn("分類 API 路徑錯誤，目前使用預設分類。");
+          const productsResponse = await fetch(`${Products_URL}/`);
+          if (productsResponse.ok) {
+            const products: ApiProduct[] = await productsResponse.json();
+            const uniqueCategories = [...new Set(
+              products.map((p) => p.category?.name).filter((name): name is string => name !== undefined && name !== null)
+            )];
+            setCategories(uniqueCategories.length > 0 ? uniqueCategories : ["MEN", "WOMEN"]);
+            return;
+          }
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data: ApiCategory[] = await response.json();
+      setCategories(data.map((cat) => cat.name));
+    } catch (error) {
+      console.error("撈取分類資料失敗：", error);
+      setError("撈取分類資料失敗，目前使用預設分類。");
+      setCategories(["MEN", "WOMEN"]);
+    }
+  };
+  // 撈取產品資料
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${Products_URL}/`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data: ApiProduct[] = await response.json();
+      const transformedProducts: Product[] = data.map((apiProduct) => ({
+        id: apiProduct.id,
+        name: apiProduct.name,
+        price: parseFloat(apiProduct.price),
+        image: `https://picsum.photos/200/300?random=${apiProduct.id}`,
+        category: apiProduct.category?.name || "UNCATEGORIZED"
+      }));
+      setProducts(transformedProducts);
+    } catch (error) {
+      setError("撈取產品資料失敗。");
+    }
+  };
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchCategories(), fetchProducts()]);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
   };
-  
   const handleSortChange = (option: SortOption) => {
     setSortOption(option);
   };
-  
   // 加入購物車
   const handleAddToCart = (productId: number) => {
-    
+    alert(`產品 ${productId} 已加入購物車。`);
   };
-  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <NavBar />
+        <div className="flex justify-center items-center h-64">
+          <div className="text-xl text-gray-600">載入中...</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+  if (error && products.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <NavBar />
+        <div className="flex justify-center items-center h-64">
+          <div className="text-xl text-red-600">{error}</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
   const filteredProducts = filterProductsByCategory(products, activeCategory);
   const sortedProducts = sortProducts(filteredProducts, sortOption);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <NavBar />
+      {error && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+          <p className="font-bold">警告</p>
+          <p>{error}</p>
+        </div>
+      )}
       <Category categories={categories} activeCategory={activeCategory} onCategoryChange={handleCategoryChange}/>
       <SortDown sortOption={sortOption} onSortChange={handleSortChange}/>
       <ProductGrid products={sortedProducts} onAddToCart={handleAddToCart}/>
