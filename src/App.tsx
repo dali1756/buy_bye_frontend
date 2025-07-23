@@ -10,6 +10,7 @@ import ShoppingInfos from "./pages/ShoppingInfo";
 import ProductCares from "./pages/ProductCare";
 import SizeInfos from "./pages/Size";
 import Shops from "./pages/Shop";
+import CategoryPage from "./pages/CategoryPage";
 
 interface RouteProps {
   children: ReactNode;
@@ -24,13 +25,11 @@ function ProtectedRoute({ children }: RouteProps) {
       </div>
     );
   }
-  
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
 function PublicRoute({ children }: RouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
-  
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -38,7 +37,6 @@ function PublicRoute({ children }: RouteProps) {
       </div>
     );
   }
-  
   return !isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 }
 
@@ -46,27 +44,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
-          element={
+        <Route path="/" element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           } 
         />
         
-        <Route 
-          path="/login" 
-          element={
+        <Route path="/login" element={
             <PublicRoute>
               <Login />
             </PublicRoute>
           } 
         />
         
-        <Route 
-          path="/register" 
-          element={
+        <Route path="/register" element={
             <PublicRoute>
               <Register />
             </PublicRoute>
@@ -84,6 +76,9 @@ function App() {
         <Route path="/sizes" element={<SizeInfos />} />
 
         <Route path="/shops" element={<Shops />} />
+
+        <Route path="/category/:gender/:type" element={<CategoryPage />} />
+        <Route path="/category/:type" element={<CategoryPage />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
