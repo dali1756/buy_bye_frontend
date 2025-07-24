@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Search, User, ShoppingCart, ChevronDown } from "lucide-react";
-import { useState, useCallback } from "react";
+import { Search, User, ShoppingCart, ChevronDown, X } from "lucide-react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { RiShirtFill } from "react-icons/ri";
 import { FaTshirt } from "react-icons/fa";
 import { GiSleevelessJacket, GiLabCoat, GiDress, GiTie } from "react-icons/gi";
@@ -22,6 +22,25 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof productCategories>("MEN");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchInputRef.current && !searchInputRef.current.parentElement?.contains(event.target as Node)) {
+        if (isSearchOpen && !searchQuery) {
+          setIsSearchOpen(false);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSearchOpen, searchQuery]);
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -33,7 +52,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
       if (onSearch) {
         onSearch(query);
       }
-    }, 300),
+    }, 500),
     [onSearch]
   );
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +64,22 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(searchQuery);
+    }
+  };
+  const handleSearchIconClick = () => {
+    if (!isSearchOpen) {
+      setIsSearchOpen(true);
+    } else if (searchQuery) {
+      if (onSearch) {
+        onSearch(searchQuery);
+      }
+    }
+  };
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+    if (onSearch) {
+      onSearch("");
     }
   };
   const productCategories = {
@@ -121,13 +156,25 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
             <button onClick={() => navigate("/brands")} className="text-gray-700 hover:text-orange-500 py-2">品牌</button>
           </div>
           <div className="flex items-center space-x-3">
+            {/* 搜尋功能 */}
             <div className="relative">
-              <form onSubmit={handleSearchSubmit}>
-                <input type="text" value={searchQuery} onChange={handleSearchInput} placeholder="搜尋產品..." className="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"/>
-                <button type="submit" className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                  <Search className="h-5 w-5 text-gray-400" />
-                </button>
-              </form>
+              <div className={`flex items-center transition-all duration-300 ease-in-out ${
+                isSearchOpen ? 'w-64' : 'w-10'
+              }`}>
+                {isSearchOpen ? (
+                  <form onSubmit={handleSearchSubmit} className="w-full">
+                    <div className="relative">
+                      <input ref={searchInputRef} type="text" value={searchQuery} onChange={handleSearchInput} placeholder="搜尋產品..." className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"/>
+                      <button type="button" onClick={handleSearchIconClick} className="absolute inset-y-0 left-0 pl-3 flex items-center hover:text-orange-500 transition-colors"><Search className="h-5 w-5 text-gray-400" /></button>
+                      {searchQuery && (
+                        <button type="button" onClick={handleCloseSearch} className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-orange-500 transition-colors"><X className="h-4 w-4 text-gray-400" /></button>
+                      )}
+                    </div>
+                  </form>
+                ) : (
+                  <button onClick={handleSearchIconClick} className="p-2 text-gray-600 hover:text-orange-500 rounded-full hover:bg-orange-50 transition-all duration-200"><Search className="h-5 w-5" /></button>
+                )}
+              </div>
             </div>
             {isAuthenticated ? (
               <>
