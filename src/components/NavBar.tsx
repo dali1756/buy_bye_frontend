@@ -38,8 +38,8 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
         }
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSearchOpen, searchQuery]);
   const handleLogout = () => {
     logout();
@@ -108,15 +108,16 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   const mainCategories: Array<keyof typeof productCategories> = ["MEN", "WOMEN"];
   const handleCategoryClick = (category: keyof typeof productCategories, item: (typeof productCategories)[keyof typeof productCategories][number]) => {
     if (location.pathname === "/" && onCategoryFilter) {
-      console.log("觸發首頁篩選:", category, item.name);
       onCategoryFilter(category, item.name);
       setIsProductMenuOpen(false);
       return;
     }
-    const categoryPath = `/category/${category.toLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
+    const gender = category.toLowerCase();
+    const type = item.name.replace(/・/g, "-").replace(/\s+/g, "-");
+    const categoryPath = `/category/${gender}/${encodeURIComponent(type)}`;
     navigate(categoryPath);
     setIsProductMenuOpen(false);
-  }
+  };
 
   return (
     <nav className="bg-white shadow-sm relative">
@@ -159,7 +160,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
             {/* 搜尋功能 */}
             <div className="relative">
               <div className={`flex items-center transition-all duration-300 ease-in-out ${
-                isSearchOpen ? 'w-64' : 'w-10'
+                isSearchOpen ? "w-64" : "w-10"
               }`}>
                 {isSearchOpen ? (
                   <form onSubmit={handleSearchSubmit} className="w-full">
