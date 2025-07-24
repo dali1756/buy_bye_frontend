@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Search, User, ShoppingCart, ChevronDown } from "lucide-react";
 import { useState, useCallback } from "react";
 import { RiShirtFill } from "react-icons/ri";
@@ -12,11 +12,13 @@ import { PiSneakerFill } from "react-icons/pi";
 
 interface NavBarProps {
   onSearch?: (query: string) => void;
+  onCategoryFilter?: (mainCategory: string, subCategory?: string) => void;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
+const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof productCategories>("MEN");
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,12 +67,18 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch }) => {
       { name: "包包", icon: <FaShoppingBag />, items: ["手提包", "後背包", "側背包", "錢包"] },
       { name: "鞋子", icon: <PiSneakerFill />, items: ["高跟鞋", "平底鞋", "靴子", "運動鞋"] },
       { name: "褲子", icon: <PiPantsDuotone />, items: ["牛仔褲", "休閒褲", "西裝褲", "運動褲", "短褲"] },
-      { name: "洋裝", icon: <GiDress />, items: ["連身裙", "洋裝"] },
+      { name: "裙子", icon: <GiDress />, items: ["連身裙", "裙子"] },
     ]
   };
   const mainCategories: Array<keyof typeof productCategories> = ["MEN", "WOMEN"];
   const handleCategoryClick = (category: keyof typeof productCategories, item: (typeof productCategories)[keyof typeof productCategories][number]) => {
-    const categoryPath = `/category/${category.toLocaleLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
+    if (location.pathname === "/" && onCategoryFilter) {
+      console.log("觸發首頁篩選:", category, item.name);
+      onCategoryFilter(category, item.name);
+      setIsProductMenuOpen(false);
+      return;
+    }
+    const categoryPath = `/category/${category.toLowerCase()}/${item.name.replace(/・/g, "-").replace(/\s+/g, "-")}`;
     navigate(categoryPath);
     setIsProductMenuOpen(false);
   }

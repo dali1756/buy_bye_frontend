@@ -29,6 +29,7 @@ interface ApiCategory {
 function Home() {
   const { } = useAuth();
   const [activeCategory, setActiveCategory] = useState("MEN");
+  const [activeSubCategory, setActiveSubCategory] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("default");
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -44,8 +45,22 @@ function Home() {
     if (activeCategory && activeCategory !== "ALL") {
       params.append("category_name", activeCategory);
     }
+    if (activeSubCategory) {
+      params.append("sub_category_name", activeSubCategory);
+    }
     if (sortOption && sortOption !== "default") {
-      params.append("ordering", sortOption);
+      let ordering = "";
+      switch (sortOption) {
+        case "price-asc":
+          ordering = "price";
+          break;
+        case "price-desc":  
+          ordering = "-price";
+          break;
+        default:
+          ordering = sortOption;
+      }
+      params.append("ordering", ordering);
     }
     return params.toString();
   };
@@ -107,9 +122,13 @@ function Home() {
   }, []);
   useEffect(() => {
     fetchProducts();
-  }, [searchQuery, activeCategory, sortOption]);
+  }, [searchQuery, activeCategory, activeSubCategory, sortOption]);
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+  const handleCategoryFilter = (mainCategory: string, subCategory?: string) => {
+    setActiveCategory(mainCategory);
+    setActiveSubCategory(subCategory || "");
   };
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
@@ -146,11 +165,17 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NavBar onSearch={handleSearch} />
+      <NavBar onSearch={handleSearch} onCategoryFilter={handleCategoryFilter} />
       {error && (
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
           <p className="font-bold">警告</p>
           <p>{error}</p>
+        </div>
+      )}
+      {activeSubCategory && (
+        <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-4">
+          <p>目前篩選：{activeCategory} &gt; {activeSubCategory}</p>
+          <button onClick={() => setActiveSubCategory("")} className="text-blue-600 hover:text-blue-800 underline ml-2">清除篩選</button>
         </div>
       )}
       <Category categories={categories} activeCategory={activeCategory} onCategoryChange={handleCategoryChange}/>
