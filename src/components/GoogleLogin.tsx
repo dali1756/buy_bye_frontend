@@ -1,6 +1,11 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+interface GoogleLoginProps {
+  onSuccess?: () => void;
+  onError?: (error: string) => void;
+}
 
 declare global {
   interface Window {
@@ -8,47 +13,76 @@ declare global {
   }
 }
 
-function GoogleLogin() {
-  const { login } = useAuth();
+function GoogleLogin({ onSuccess, onError }: GoogleLoginProps) {
+  const { googleLogin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!window.google) return;
-    window.google.accounts.id.initialize({
-      client_id: "938280302594-av3f2ogqboi37hdilu9tbtmh5984dui2.apps.googleusercontent.com",
-      callback: credentialResponse,
-    });
-    window.google.accounts.id.renderButton(
-      document.getElementById("google-signin"),
-      { theme: "outline", size: "large" }
-    );
-  }, []);
-
-  const credentialResponse = async (response: any) => {
-    const id_token = response.credential;
-    try {
-      const response = await fetch("http://localhost:8000/api/members/google-login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          token: id_token
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        login(data.user);
-        navigate("/");
-      } else {
-        alert(data.error || "Google 登入失敗。");
+    const loadGoogleScript = () => {
+      if (window.google) {
+        initializeGoogle();
+        return;
       }
-    } catch (e) {
-      alert("無法登入。");
-      console.error(e);
-    }
-  };
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeGoogle;
+      document.head.appendChild(script);
+    };
+    const initializeGoogle = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "938280302594-av3f2ogqboi37hdilu9tbtmh5984dui2.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+        window.google.accounts.id.renderButton(
+          document.getElementById("google-signin-button"),
+          {
+            theme: "outline",
+            size: "large",
+            width: "100%",
+            text: "signin_with",
+            locale: "zh_TW"
+          }
+        );
+      }
+    };
+    const handleCredentialResponse = async (response: any) => {
+      try {
+        if (!response.credential) {
+          throw new Error("查無 Google 憑證。");
+        }
+        await googleLogin(response.credential);
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Google 登入處理失敗：", error);
+        const errorMessage = error instanceof Error ? error.message : "Google 登入失敗。";
+        if (onError) {
+          onError(errorMessage);
+        }
+      }
+    };
+    loadGoogleScript();
+    return () => {
+      const script = document.querySelector("script[src='https://accounts.google.com/gsi/client']");
+      if (script) {
+        script.remove();
+      }
+    };
+  }, [googleLogin, navigate, onSuccess, onError]);
+
   return (
-    <div id="google-signin" className="mt-6 flex justify-center" />
-  )
+    <div className="w-full">
+      <div id="google-signin-button" className="w-full"></div>
+    </div>
+  );
 }
 
 export default GoogleLogin;
