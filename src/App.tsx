@@ -11,6 +11,7 @@ import ProductCares from "./pages/ProductCare";
 import SizeInfos from "./pages/Size";
 import Shops from "./pages/Shop";
 import CategoryPage from "./pages/CategoryPage";
+import ProfilePage from "./pages/ProfilePage";
 
 interface RouteProps {
   children: ReactNode;
@@ -79,6 +80,7 @@ function App() {
 
         <Route path="/category/:gender/:type" element={<CategoryPage />} />
         <Route path="/category/:type" element={<CategoryPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
