@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, User, Phone, Mail, MessageCircle } from 'lucide-react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
+import ScrollTop from '../components/ScrollTop';
 
 function ContactUs() {
   const [formData, setFormData] = useState({
@@ -92,6 +93,7 @@ function ContactUs() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ScrollTop/>
       <NavBar />
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6">

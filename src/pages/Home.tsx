@@ -6,6 +6,7 @@ import SortDown from "../components/Sort";
 import ProductGrid from "../components/ProductGrid";
 import Footer from "../components/Footer";
 import type { Product, SortOption } from "../types/Product";
+import ScrollTop from "../components/ScrollTop";
 
 interface ApiProduct {
   id: number;
@@ -165,6 +166,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ScrollTop />
       <NavBar onSearch={handleSearch} onCategoryFilter={handleCategoryFilter} />
       {error && (
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">

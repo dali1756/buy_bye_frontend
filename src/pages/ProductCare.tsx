@@ -1,11 +1,13 @@
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import ScrollTop from "../components/ScrollTop";
 
 function ProductCares() {
   return (
     <>
       <NavBar />
+      <ScrollTop/>
       <div className="max-w-4xl mx-auto px-4 py-12 text-gray-800">
         <h1 className="text-3xl font-bold mb-8">商品保養指南</h1>
         <section className="mb-10">

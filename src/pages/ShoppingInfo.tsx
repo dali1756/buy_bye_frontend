@@ -1,11 +1,13 @@
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import ScrollTop from "../components/ScrollTop";
 
 function ShoppingInfos() {
   return (
     <>
       <NavBar />
+      <ScrollTop/>
       <div className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-6">運送資訊</h1>
         <div className="space-y-6 text-gray-700 leading-relaxed text-base">

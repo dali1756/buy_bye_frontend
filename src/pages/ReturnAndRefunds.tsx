@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, Package, Clock, CreditCard, AlertCircle, CheckCircle, XCircle } from "lucide-react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import ScrollTop from "../components/ScrollTop";
 
 function ReturnAndRefunds() {
   const [activeTab, setActiveTab] = useState("policy");
@@ -199,6 +200,7 @@ function ReturnAndRefunds() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ScrollTop/>
       <NavBar />
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6">

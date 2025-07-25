@@ -1,10 +1,12 @@
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import ScrollTop from "../components/ScrollTop";
 
 function SizeInfos() {
   return (
     <>
       <NavBar />
+      <ScrollTop/>
       <div className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">尺寸指南</h1>
 
