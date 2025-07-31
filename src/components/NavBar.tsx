@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Search, User, ShoppingCart, ChevronDown, X } from "lucide-react";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { RiShirtFill } from "react-icons/ri";
 import { FaTshirt } from "react-icons/fa";
 import { GiSleevelessJacket, GiLabCoat, GiDress, GiTie } from "react-icons/gi";
@@ -48,18 +48,9 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   const handleLogin = () => navigate("/login");
   const handleShop = () => navigate("/shops");
   const handleBrand = () => navigate("/brands");
-  const debounceSearch = useCallback(
-    debounce((query: string) => {
-      if (onSearch) {
-        onSearch(query);
-      }
-    }, 500),
-    [onSearch]
-  );
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    debounceSearch(query);
   };
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,16 +202,5 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
     </nav>
   );
 };
-function debounce(func: Function, wait: number) {
-  let timeout: ReturnType<typeof setTimeout>;
-  return function executedFunction(...args: any[]) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
 
 export default NavBar;
