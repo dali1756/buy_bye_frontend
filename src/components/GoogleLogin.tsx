@@ -24,7 +24,7 @@ function GoogleLogin({ onSuccess, onError }: GoogleLoginProps) {
         return;
       }
       const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
+      script.src = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
       script.async = true;
       script.defer = true;
       script.onload = initializeGoogle;
@@ -33,7 +33,7 @@ function GoogleLogin({ onSuccess, onError }: GoogleLoginProps) {
     const initializeGoogle = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "938280302594-av3f2ogqboi37hdilu9tbtmh5984dui2.apps.googleusercontent.com",
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           callback: handleCredentialResponse,
           auto_select: false,
           cancel_on_tap_outside: true,
@@ -71,7 +71,8 @@ function GoogleLogin({ onSuccess, onError }: GoogleLoginProps) {
     };
     loadGoogleScript();
     return () => {
-      const script = document.querySelector("script[src='https://accounts.google.com/gsi/client']");
+      const GOOGLE_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
+      const script = document.querySelector(`script[src="${GOOGLE_URL}"]`);
       if (script) {
         script.remove();
       }
