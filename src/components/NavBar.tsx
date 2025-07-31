@@ -47,6 +47,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   };
   const handleLogin = () => navigate("/login");
   const handleShop = () => navigate("/shops");
+  const handleBrand = () => navigate("/brands");
   const debounceSearch = useCallback(
     debounce((query: string) => {
       if (onSearch) {
@@ -154,7 +155,7 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
               </div>
             </div>
             <button onClick={handleShop} className="hover:text-orange-500 py-2">店舖</button>
-            <button onClick={() => navigate("/brands")} className="text-gray-700 hover:text-orange-500 py-2">品牌</button>
+            <button onClick={handleBrand} className="text-gray-700 hover:text-orange-500 py-2">品牌</button>
           </div>
           <div className="flex items-center space-x-3">
             {/* 搜尋功能 */}
