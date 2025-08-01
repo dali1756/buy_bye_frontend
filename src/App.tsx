@@ -15,6 +15,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Brands from "./pages/Brand";
 // 後台
 import BrandController from "./pages/admin/Brand";
+import ProductController from "./pages/admin/Product";
 
 interface RouteProps {
   children: ReactNode;
@@ -89,6 +90,8 @@ function App() {
 
         {/* 後台 */}
         <Route path="/admin/brands" element={<BrandController />} />
+
+        <Route path="/admin/products" element={<ProductController />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
