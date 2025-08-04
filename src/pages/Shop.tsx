@@ -1,5 +1,6 @@
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import ScrollTop from "../components/ScrollTop";
 
 interface Shop {
   name: string;
@@ -84,6 +85,7 @@ const shops: Shop[] = [
 function Shops() {
   return (
     <>
+    <ScrollTop />
     <NavBar />
     <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8 text-center">店舖資訊</h1>
