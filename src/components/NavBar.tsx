@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Search, User, ShoppingCart, ChevronDown, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -17,6 +18,7 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { cart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
@@ -171,9 +173,11 @@ const NavBar: React.FC<NavBarProps> = ({ onSearch, onCategoryFilter }) => {
             </div>
             {isAuthenticated ? (
               <>
-                <button onClick={() => navigate("/cart")} className="p-2 text-gray-600 hover:text-orange-500 relative rounded-full hover:bg-orange-50">
+                <button onClick={() => navigate("/carts")} className="p-2 text-gray-600 hover:text-orange-500 relative rounded-full hover:bg-orange-50">
                   <ShoppingCart size={20} />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">99</span>
+                  {cart && cart.total_items > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">{cart.total_items > 99 ? '99+' : cart.total_items}</span>
+                  )}
                 </button>
                 <div className="relative group">
                   <button className="flex items-center space-x-2 p-2 text-gray-600 hover:text-orange-500 rounded-lg hover:bg-orange-50">
